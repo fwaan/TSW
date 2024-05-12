@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="it.unisa.OrderBean" %>
+<%@ page import="it.unisa.OrderBean, it.unisa.UserBean" %>
 <%@ include file="header.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%
@@ -11,7 +11,7 @@
     <h2 style="color: white;">Login</h2>
     <form action="ProductControl?action=loginutente" method="post">
         <input type="hidden" name="action" value="login">
-        <label for="loginUserid" style="color: white;">User ID:</label><br>
+        <label for="loginUserid" style="color: white;">E-mail:</label><br>
         <input type="text" id="loginUserid" name="userid" required><br>
         <label for="loginPassword" style="color: white;">Password:</label><br>
         <input type="password" id="loginPassword" name="password" required>
@@ -25,8 +25,8 @@
     <h2 style="color: white;">Registrazione</h2>
     <form action="ProductControl?action=registrautente" method="post" onsubmit="return validateForm()">
         <input type="hidden" name="action" value="register">
-        <label for="registerUserid" style="color: white;">User ID:</label><br>
-        <input type="text" id="registerUserid" name="userid" required><br>
+        <label for="registerUserid" style="color: white;">E-mail:</label><br>
+        <input type="text" id="registerUserid" name="userid" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required><br>
         <label for="registerPassword" style="color: white;">Password:</label><br>
         <input type="password" id="registerPassword" name="password" required>
         <button type="button" onmousedown="showPassword('registerPassword')" onmouseup="hidePassword('registerPassword')"><i class="fa fa-eye" aria-hidden="true"></i></button><br>
@@ -42,12 +42,21 @@
 <script>
 
 function validateForm() {
+    var email = document.getElementById('registerUserid').value;
     var password = document.getElementById('registerPassword').value;
     var confirmPassword = document.getElementById('confirmPassword').value;
+
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+        alert('Per favore inserisci un indirizzo email valido.');
+        return false;
+    }
+
     if (password != confirmPassword) {
         alert('Le password non coincidono.');
         return false;
     }
+
     return true;
 }
 
@@ -71,6 +80,7 @@ function showLoginForm() {
 </script>
 <%
     } else {
+        UserBean user = (UserBean) request.getSession().getAttribute("user");
         List<OrderBean> orders = (List<OrderBean>) request.getAttribute("ordini");
         if(orders == null){
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ProductControl?action=ordini");
@@ -91,6 +101,45 @@ function showLoginForm() {
         <input type="hidden" name="action" value="logout">
         <input type="submit" value="Logout">
     </form>
+    <div style="display: flex; align-items: center;">
+        <label class="switch" style="margin-top: 0.625rem;">
+            <input type="checkbox" id="toggleSwitch">
+            <span class="slider round"></span>
+        </label>
+        <p style="color: white; margin-left: 0.625rem;">Informazioni utente</p>
+    </div>
+    <div id="userInfo" style="display: none;">
+        <form action="ProductControl?action=changeUserLocation" method="post">
+            <input type="hidden" name="userid" value="<%= user.getUserid() %>">
+            <div style="width: 40%;">
+                <table style="background-color: white; color: black; border: 0.125rem solid black; width: 100%; height: 10%; border-collapse: collapse;">
+                    <tr>
+                        <th style="border: 0.125rem solid black;">Indirizzo</th>
+                        <th style="border: 0.125rem solid black;">Città</th>
+                        <th style="border: 0.125rem solid black;">Provincia</th>
+                        <th style="border: 0.125rem solid black;">CAP</th>
+                    </tr>
+                    <tr>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="indirizzo" value="<%= user.getIndirizzo() != null ? user.getIndirizzo() : "" %>" required></td>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="citta" value="<%= user.getCitta() != null ? user.getCitta() : "" %>" required></td>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="provincia" value="<%= user.getProvincia() != null ? user.getProvincia() : "" %>" required></td>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="cap" value="<%= user.getCAP() != null ? user.getCAP() : "" %>" maxlength="10" required></td>
+                    </tr>
+                </table>
+                <input type="submit" value="EFFETTUA MODIFICHE" style="width: 100%; height: 1.5rem; border-radius: 0.25rem; font-weight: bolder; font-size: 1.1rem;">
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('toggleSwitch').addEventListener('click', function() {
+            var userInfo = document.getElementById('userInfo');
+            if (userInfo.style.display === 'none') {
+                userInfo.style.display = 'block';
+            } else {
+                userInfo.style.display = 'none';
+            }
+        });
+    </script>
     <p style="color: white;">Qui è la tua lista degli ordini:</p>
     <%
     if (orders != null && !orders.isEmpty()) {

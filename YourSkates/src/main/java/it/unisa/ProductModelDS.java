@@ -104,17 +104,29 @@ public class ProductModelDS implements ProductModel {
 	public synchronized void doSaveOrder(String userid, CartBean cart) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-
-		String insertSQL = "INSERT INTO ordine (userid, tipo_skateboard, colore, id_asse, id_carrello, id_cuscinetti, id_ruote, prezzo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+	
+		String insertSQL = "INSERT INTO ordine (userid, tipo_skateboard, colore, id_asse, id_carrello, id_cuscinetti, id_ruote, prezzo, indirizzo, citta, provincia, CAP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		String updateQuantitySQL = "UPDATE prodotto SET quantita = quantita - 1 WHERE id = ?";
-
+		String selectUserSQL = "SELECT indirizzo, citta, provincia, CAP FROM utente WHERE userid = ?";
+	
 		try {
 			connection = ds.getConnection();
 			connection.setAutoCommit(false);
-
+	
+			preparedStatement = connection.prepareStatement(selectUserSQL);
+			preparedStatement.setString(1, userid);
+			ResultSet rs = preparedStatement.executeQuery();
+			String indirizzo = "", citta = "", provincia = "", CAP = "";
+			if (rs.next()) {
+				indirizzo = rs.getString("indirizzo");
+				citta = rs.getString("citta");
+				provincia = rs.getString("provincia");
+				CAP = rs.getString("CAP");
+			}
+	
 			for (SkateboardBean skateboard : cart.getSkateboards()) {
 				List<ProductBean> components = skateboard.getComponents();
-
+	
 				preparedStatement = connection.prepareStatement(insertSQL);
 				preparedStatement.setString(1, userid);
 				preparedStatement.setString(2, skateboard.getTipo());
@@ -124,7 +136,11 @@ public class ProductModelDS implements ProductModel {
 				preparedStatement.setInt(6, components.get(2).getId()); // Cuscinetti
 				preparedStatement.setInt(7, components.get(3).getId()); // Ruote
 				preparedStatement.setFloat(8, skateboard.getTotalPrice()); // Prezzo
-
+				preparedStatement.setString(9, indirizzo); // Indirizzo
+				preparedStatement.setString(10, citta); // Città
+				preparedStatement.setString(11, provincia); // Provincia
+				preparedStatement.setString(12, CAP); // CAP
+	
 				preparedStatement.executeUpdate();
 				for (ProductBean component : components) {
 					preparedStatement = connection.prepareStatement(updateQuantitySQL);
@@ -132,7 +148,7 @@ public class ProductModelDS implements ProductModel {
 					preparedStatement.executeUpdate();
 				}
 			}
-
+	
 			connection.commit();
 		} finally {
 			try {
@@ -181,6 +197,39 @@ public class ProductModelDS implements ProductModel {
     	}
 	}
 
+	public synchronized void doChangeUserLocation(UserBean utente) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+	
+		String updateSQL = "UPDATE "+ ProductModelDS.TABLE_NAME2 
+				+" SET indirizzo = ?, citta = ?, provincia = ?, CAP = ? WHERE userid = ?";
+	
+		try {
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(updateSQL);
+			preparedStatement.setString(1, utente.getIndirizzo());
+			preparedStatement.setString(2, utente.getCitta());
+			preparedStatement.setString(3, utente.getProvincia());
+			preparedStatement.setString(4, utente.getCAP());
+			preparedStatement.setString(5, utente.getUserid());
+	
+			preparedStatement.executeUpdate();
+	
+			connection.commit();
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null){
+					connection.setAutoCommit(true);
+					connection.close();
+				}
+			}
+		}
+	}
+
 	@Override
 	public synchronized ProductBean doRetrieveByKey(int id) throws SQLException {
 		Connection connection = null;
@@ -220,36 +269,40 @@ public class ProductModelDS implements ProductModel {
 	
 	@Override
 	public UserBean doRetrieveByKeyUser(String userid) throws SQLException {
-	    Connection connection = null;
-	    PreparedStatement preparedStatement = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 
-	    String selectSQL = "SELECT * FROM " + ProductModelDS.TABLE_NAME2 + " WHERE userid = ?";
+		String selectSQL = "SELECT * FROM utente WHERE userid = ?";
 
-    	try {
-    	    connection = ds.getConnection();
-    	    preparedStatement = connection.prepareStatement(selectSQL);
-    	    preparedStatement.setString(1, userid);
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, userid);
 
-    	    ResultSet rs = preparedStatement.executeQuery();
+			ResultSet rs = preparedStatement.executeQuery();
 
-    	    if (rs.next()) {
-    	        UserBean bean = new UserBean();
-    	        bean.setUserid(rs.getString("userid"));
-    	        bean.setTipo(rs.getString("tipo"));
-    	        bean.setPasswordHash(rs.getString("password_hash"));
-    	        return bean;
-    	    }
+			if (rs.next()) {
+				UserBean bean = new UserBean();
+				bean.setUserid(rs.getString("userid"));
+				bean.setTipo(rs.getString("tipo"));
+				bean.setPasswordHash(rs.getString("password_hash"));
+				bean.setIndirizzo(rs.getString("indirizzo"));
+				bean.setCitta(rs.getString("citta"));
+				bean.setProvincia(rs.getString("provincia"));
+				bean.setCAP(rs.getString("CAP"));
+				return bean;
+			}
 
-    	} finally {
-    	    try {
-    	        if (preparedStatement != null)
-    	            preparedStatement.close();
-    	    } finally {
-    	        if (connection != null)
-    	            connection.close();
-    	    }
-    	}
-    	return null;
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -312,25 +365,29 @@ public class ProductModelDS implements ProductModel {
 	public UserBean doCheckUser(String userid, String password) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-	
+
 		String selectSQL = "SELECT * FROM " + ProductModelDS.TABLE_NAME2 + " WHERE userid = ? AND password_hash = ?";
-	
+
 		try {
 			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
 			preparedStatement.setString(1, userid);
 			preparedStatement.setString(2, password);
-	
+
 			ResultSet rs = preparedStatement.executeQuery();
-	
+
 			if (rs.next()) {
 				UserBean bean = new UserBean();
 				bean.setUserid(rs.getString("userid"));
 				bean.setTipo(rs.getString("tipo"));
 				bean.setPasswordHash(rs.getString("password_hash"));
+				bean.setIndirizzo(rs.getString("indirizzo"));
+				bean.setCitta(rs.getString("citta"));
+				bean.setProvincia(rs.getString("provincia"));
+				bean.setCAP(rs.getString("CAP"));
 				return bean;
 			}
-	
+
 		} finally {
 			try {
 				if (preparedStatement != null)

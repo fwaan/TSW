@@ -16,7 +16,11 @@ CREATE TABLE prodotto (
 CREATE TABLE utente (
  userid varchar(255) primary key,
  tipo ENUM('Admin','Customer') default 'Customer' not null,
- password_hash CHAR(64) not null
+ password_hash CHAR(64) not null,
+ indirizzo VARCHAR(255),
+ citta VARCHAR(255),
+ provincia VARCHAR(255),
+ CAP VARCHAR(10)
 );
 
 CREATE TABLE ordine (
@@ -29,6 +33,10 @@ CREATE TABLE ordine (
     id_cuscinetti int not null,
     id_ruote int not null,
     prezzo float not null,
+    indirizzo VARCHAR(255) not null,
+    citta VARCHAR(255) not null,
+    provincia VARCHAR(255) not null,
+    CAP VARCHAR(10) not null,
     FOREIGN KEY (userid) REFERENCES utente(userid),
     FOREIGN KEY (id_asse) REFERENCES prodotto(id),
     FOREIGN KEY (id_carrello) REFERENCES prodotto(id),

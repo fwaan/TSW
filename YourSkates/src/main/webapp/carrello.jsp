@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.*" %>
 <%@ page import="it.unisa.ProductModelDS" %>
-<%@ page import="it.unisa.CartBean, it.unisa.SkateboardBean, it.unisa.ProductBean" %>
+<%@ page import="it.unisa.CartBean, it.unisa.SkateboardBean, it.unisa.ProductBean, it.unisa.UserBean" %>
 <%@ include file="header.jsp" %>
 <style>
     table{
@@ -98,13 +98,23 @@
                         break;
                     }
                 }
+            
+                // Verifica che l'utente abbia un indirizzo, città, provincia e CAP nel database
+                ProductModelDS productModelDS = new ProductModelDS();
+                UserBean user = productModelDS.doRetrieveByKeyUser(userid);
+                if (user.getIndirizzo() == null || user.getCitta() == null || user.getProvincia() == null || user.getCAP() == null) {
+                    canPurchase = false;
+                }
+            
                 if (canPurchase) { %>
                     <form action="ProductControl" method="post">
                         <input type='hidden' name='action' value='saveOrder'>
                         <button type='submit' class='full-width-button'>Finalizza l'acquisto</button>
                     </form>
-                <% } else { %>
+                <% } else if (outOfStockComponent != null) { %>
                     <p style='text-align: center;'>Abbiamo esaurito il componente <%= outOfStockComponent %> nel tuo ordine, rimuovilo o attendi che viene rifornito per completare l'acquisto</p>
+                <% } else { %>
+                    <p style='text-align: center;'>Per completare l'acquisto, aggiungi il tuo indirizzo, città, provincia e CAP nel tuo profilo</p>
                 <% }
             } else { %>
                 <p style='text-align: center;'>Accedi per finalizzare l'acquisto</p>

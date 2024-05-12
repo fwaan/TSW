@@ -19,6 +19,10 @@ public class OrderBean implements Serializable {
     private int idRuote;
     private String nomeRuote;
     private float prezzo;
+    private String indirizzo;
+    private String citta;
+    private String provincia;
+    private String CAP;
 
     public OrderBean() {
     }
@@ -125,5 +129,37 @@ public class OrderBean implements Serializable {
 
     public void setPrezzo(float prezzo) {
         this.prezzo = prezzo;
+    }
+
+    public String getIndirizzo() {
+        return indirizzo;
+    }
+
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
+    }
+
+    public String getCitta() {
+        return citta;
+    }
+
+    public void setCitta(String citta) {
+        this.citta = citta;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getCAP() {
+        return CAP;
+    }
+
+    public void setCAP(String CAP) {
+        this.CAP = CAP;
     }
 }

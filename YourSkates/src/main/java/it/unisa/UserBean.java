@@ -1,14 +1,23 @@
 package it.unisa;
 
 public class UserBean implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     private String userid;
     private String tipo;
     private String password_hash;
+    private String indirizzo;
+    private String citta;
+    private String provincia;
+    private String CAP;
 
     public UserBean() {
         userid = "";
         tipo = "";
         password_hash = "";
+        indirizzo = "";
+        citta = "";
+        provincia = "";
+        CAP = "";
     }
 
     public String getUserid() {
@@ -33,5 +42,47 @@ public class UserBean implements java.io.Serializable {
 
     public void setPasswordHash(String password_hash) {
         this.password_hash = password_hash;
+    }
+
+    public String getIndirizzo() {
+        return indirizzo;
+    }
+
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
+    }
+
+    public String getCitta() {
+        return citta;
+    }
+
+    public void setCitta(String citta) {
+        this.citta = citta;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getCAP() {
+        return CAP;
+    }
+
+    public void setCAP(String CAP) {
+        this.CAP = CAP;
+    }
+
+    @Override
+    public String toString() {
+        return "UserBean{" +
+                "indirizzo='" + indirizzo + '\'' +
+                ", citta='" + citta + '\'' +
+                ", provincia='" + provincia + '\'' +
+                ", CAP='" + CAP + '\'' +
+                '}';
     }
 }

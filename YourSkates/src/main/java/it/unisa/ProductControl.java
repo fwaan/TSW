@@ -182,8 +182,12 @@ public class ProductControl extends HttpServlet {
 							}
 							else{
 								//password corretta
+								request.getSession().removeAttribute("userid");
+								request.getSession().removeAttribute("tipo");
+								request.getSession().removeAttribute("user");
 								request.getSession().setAttribute("userid", userid);
 								request.getSession().setAttribute("tipo", user.getTipo());
+								request.getSession().setAttribute("user", user);
 							}
 						} catch (NoSuchAlgorithmException | SQLException e) {
 							e.printStackTrace();
@@ -293,6 +297,27 @@ public class ProductControl extends HttpServlet {
 					request.setAttribute("verificatarocca", "true");
 
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/dettagli-prodotto.jsp");
+					dispatcher.forward(request, response);
+				}else if (action.equalsIgnoreCase("changeUserLocation")){
+					String userid = request.getParameter("userid");
+					String indirizzo = request.getParameter("indirizzo");
+					String citta = request.getParameter("citta");
+					String provincia = request.getParameter("provincia");
+					String cap = request.getParameter("cap");
+				
+					UserBean bean = new UserBean();
+					bean.setUserid(userid);
+					bean.setIndirizzo(indirizzo);
+					bean.setCitta(citta);
+					bean.setProvincia(provincia);
+					bean.setCAP(cap);
+					model.doChangeUserLocation(bean);
+					bean = model.doRetrieveByKeyUser(userid);
+
+					request.removeAttribute("user");
+					request.getSession().setAttribute("user", bean);
+				
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/utente.jsp");
 					dispatcher.forward(request, response);
 				} else if (action.equalsIgnoreCase("skateboard")) {
 
