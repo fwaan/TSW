@@ -292,6 +292,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
 @media (max-width: 600px) {
         .navbar {
             display: flex;

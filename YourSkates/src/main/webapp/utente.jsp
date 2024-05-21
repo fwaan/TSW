@@ -7,9 +7,6 @@
     if (userid == null) {
 %>
 <style>
-    * {
-    box-sizing: border-box;
-    }
     #registerForm {
         background-color: #f2f2f2;
         padding: 1.25rem;
