@@ -15,7 +15,7 @@
         padding: 1.25rem;
         border-radius: 0.3125rem;
         max-width: 37.5rem;
-        margin: 1rem auto;
+        margin: 1rem auto 2rem auto;
         border: 0.0625rem solid #ccc;
         width: 100%;
     }
@@ -72,7 +72,7 @@
         padding: 1.25rem;
         border-radius: 0.3125rem;
         max-width: 37.5rem;
-        margin: 1rem auto;
+        margin: 1rem auto 2rem auto;
         border: 0.0625rem solid #ccc;
         width: 100%;
     }

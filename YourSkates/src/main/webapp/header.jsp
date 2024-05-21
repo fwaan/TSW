@@ -10,6 +10,10 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             body{
+                overflow-x: hidden;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
                 background-image: url('immagini/sfondo.jpg');
                 background-repeat: no-repeat;
                 background-attachment: fixed;
@@ -133,12 +137,15 @@
                 transform: scale(1.1);
             }
 
+            main {
+                flex: 1 0 auto;
+            }
             footer {
+                flex-shrink: 0;
                 background-color: black;
                 color: white;
                 text-align: center;
                 padding: 0.625rem;
-                position: fixed;
                 left: 0;
                 bottom: 0;
                 width: 100%;
@@ -327,3 +334,4 @@ input:checked + .slider:before {
                 <a href="carrello.jsp"><i class="fa fa-shopping-cart"></i></a>
             </div>
         </div>
+        <main>
