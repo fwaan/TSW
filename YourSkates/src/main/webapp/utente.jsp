@@ -6,36 +6,205 @@
     String userid = (String) session.getAttribute("userid");
     if (userid == null) {
 %>
+<style>
+    * {
+    box-sizing: border-box;
+    }
+    #registerForm {
+        background-color: #f2f2f2;
+        padding: 1.25rem;
+        border-radius: 0.3125rem;
+        max-width: 37.5rem;
+        margin: 1rem auto;
+        border: 0.0625rem solid #ccc;
+        width: 100%;
+    }
 
+    #registerForm h2 {
+        color: #333;
+    }
+
+    #registerForm label {
+        color: #333;
+        font-weight: bold;
+    }
+
+    #registerForm input[type="text"],
+    #registerForm input[type="password"] {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #registerForm input[type="submit"] {
+        margin-top: 0.125rem;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #registerForm input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    #registerForm table {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    #registerForm table th,
+    #registerForm table td {
+        text-align: center;
+        padding: 10px;
+    }
+    .responsive-table {
+        width: 100%;
+        overflow-x: auto;
+    }
+    #loginForm {
+        background-color: #f2f2f2;
+        padding: 1.25rem;
+        border-radius: 0.3125rem;
+        max-width: 37.5rem;
+        margin: 1rem auto;
+        border: 0.0625rem solid #ccc;
+        width: 100%;
+    }
+
+    #loginForm h2 {
+        color: #333;
+    }
+
+    #loginForm label {
+        color: #333;
+        font-weight: bold;
+    }
+
+    #loginForm input[type="text"],
+    #loginForm input[type="password"] {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #loginForm input[type="submit"] {
+        margin-top: 0.125rem;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #loginForm input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    #loginForm table {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    #loginForm table th,
+    #loginForm table td {
+        text-align: center;
+        padding: 10px;
+    }
+    .responsive-table {
+        width: 100%;
+        overflow-x: auto;
+    }
+    @media (max-width: 600px) {
+        #loginForm {
+            padding: 10px;
+        }
+
+        #loginForm input[type="text"],
+        #loginForm input[type="password"] {
+            width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+            box-sizing: border-box; /* Include padding e border nella larghezza totale */
+        }
+
+        #loginForm .responsive-table {
+            width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+        }
+        #registerForm {
+            padding: 10px;
+        }
+
+        #registerForm input[type="text"],
+        #registerForm input[type="password"] {
+            width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+            box-sizing: border-box; /* Include padding e border nella larghezza totale */
+        }
+
+        #registerForm .responsive-table {
+            width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+        }
+        .responsive-table {
+            width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+        }
+    }
+</style>
 <div id="loginForm">
-    <h2 style="color: white;">Login</h2>
+    <h2 >Login</h2>
     <form action="ProductControl?action=loginutente" method="post">
         <input type="hidden" name="action" value="login">
-        <label for="loginUserid" style="color: white;">E-mail:</label><br>
+        <label for="loginUserid" >E-mail:</label><br>
         <input type="text" id="loginUserid" name="userid" required><br>
-        <label for="loginPassword" style="color: white;">Password:</label><br>
+        <label for="loginPassword" >Password:</label><br>
         <input type="password" id="loginPassword" name="password" required>
         <button type="button" onmousedown="showPassword('loginPassword')" onmouseup="hidePassword('loginPassword')"><i class="fa fa-eye" aria-hidden="true"></i></button><br>
         <input type="submit" value="Login">
     </form>
-    <h3 style="color: white;"> Non hai un account? </h3><button onclick="showRegisterForm()">Registrati</button>
+    <h3 > Non hai un account? </h3><button onclick="showRegisterForm()">Registrati</button>
 </div>
 
+
+
 <div id="registerForm" style="display: none;">
-    <h2 style="color: white;">Registrazione</h2>
+    <h2 ">Registrazione</h2>
     <form action="ProductControl?action=registrautente" method="post" onsubmit="return validateForm()">
         <input type="hidden" name="action" value="register">
-        <label for="registerUserid" style="color: white;">E-mail:</label><br>
+        <label for="registerUserid" >E-mail:</label><br>
         <input type="text" id="registerUserid" name="userid" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required><br>
-        <label for="registerPassword" style="color: white;">Password:</label><br>
+        <label for="registerPassword">Password:</label><br>
         <input type="password" id="registerPassword" name="password" required>
         <button type="button" onmousedown="showPassword('registerPassword')" onmouseup="hidePassword('registerPassword')"><i class="fa fa-eye" aria-hidden="true"></i></button><br>
-        <label for="confirmPassword" style="color: white;">Conferma Password:</label><br>
+        <label for="confirmPassword">Conferma Password:</label><br>
         <input type="password" id="confirmPassword" name="confirmPassword" required>
         <button type="button" onmousedown="showPassword('confirmPassword')" onmouseup="hidePassword('confirmPassword')"><i class="fa fa-eye" aria-hidden="true"></i></button><br>
+        <div class="responsive-table" style="background-color: #f2f2f2; color: black; padding: 10px; display: flex; flex-direction: column;">
+            <div style="display: flex; flex-direction: row; align-items: center;">
+                <div style="flex: 1;"><strong>Indirizzo</strong></div>
+                <div style="flex: 1;"><input type="text" name="indirizzo" value="" required style="min-width: 8rem; width: 100%; box-sizing: border-box;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row; align-items: center;">
+                <div style="flex: 1;"><strong>Città</strong></div>
+                <div style="flex: 1;"><input type="text" name="citta" value="" required style="min-width: 8rem; width: 100%; box-sizing: border-box;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row; align-items: center;">
+                <div style="flex: 1;"><strong>Provincia</strong></div>
+                <div style="flex: 1;"><input type="text" name="provincia" value="" required style="min-width: 8rem; width: 100%; box-sizing: border-box;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row; align-items: center;">
+                <div style="flex: 1;"><strong>CAP</strong></div>
+                <div style="flex: 1;"><input type="text" name="cap" value="" maxlength="10" required style="min-width: 4rem; width: 100%; box-sizing: border-box;"></div>
+            </div>
+        </div>
         <input type="submit" value="Registra">
     </form>
-    <h3 style="color: white;"> Hai già un account? </h3><button onclick="showLoginForm()">Accedi</button>
+    <h3 > Hai già un account? </h3><button onclick="showLoginForm()">Accedi</button>
 </div>
 
 
@@ -120,10 +289,10 @@ function showLoginForm() {
                         <th style="border: 0.125rem solid black;">CAP</th>
                     </tr>
                     <tr>
-                        <td style="border: 0.125rem solid black;"><input type="text" name="indirizzo" value="<%= user.getIndirizzo() != null ? user.getIndirizzo() : "" %>" required></td>
-                        <td style="border: 0.125rem solid black;"><input type="text" name="citta" value="<%= user.getCitta() != null ? user.getCitta() : "" %>" required></td>
-                        <td style="border: 0.125rem solid black;"><input type="text" name="provincia" value="<%= user.getProvincia() != null ? user.getProvincia() : "" %>" required></td>
-                        <td style="border: 0.125rem solid black;"><input type="text" name="cap" value="<%= user.getCAP() != null ? user.getCAP() : "" %>" maxlength="10" required></td>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="indirizzo" value="<%= user.getIndirizzo() != null ? user.getIndirizzo() : "" %>" required style="width: 100%; box-sizing: border-box;"></td>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="citta" value="<%= user.getCitta() != null ? user.getCitta() : "" %>" required style="width: 100%; box-sizing: border-box;"></td>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="provincia" value="<%= user.getProvincia() != null ? user.getProvincia() : "" %>" required style="width: 100%; box-sizing: border-box;"></td>
+                        <td style="border: 0.125rem solid black;"><input type="text" name="cap" value="<%= user.getCAP() != null ? user.getCAP() : "" %>" maxlength="10" required style="width: 100%; box-sizing: border-box;"></td>
                     </tr>
                 </table>
                 <input type="submit" value="EFFETTUA MODIFICHE" style="width: 100%; height: 1.5rem; border-radius: 0.25rem; font-weight: bolder; font-size: 1.1rem;">

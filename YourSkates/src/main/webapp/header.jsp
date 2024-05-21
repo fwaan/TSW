@@ -3,7 +3,7 @@
     <html>
 
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
         <title>YourSkates</title>
         <link rel="stylesheet"
@@ -18,10 +18,13 @@
                 background-color: black;
             }
             .navbar {
+                width: 100%;
+                overflow: auto;
+                box-sizing: border-box;
                 display: flex;
                 align-items: center;
                 background-color: black;
-                border-bottom: #ffffff 2px solid;
+                border-bottom: #ffffff 0.125rem solid;
             }
 
             .navbar a,
@@ -57,7 +60,6 @@
             .logo-name {
                 color: #fff;
                 font-size: 1.5625rem;
-                /* Adjust as needed */
                 font-weight: bold;
                 margin-right: auto;
             }
@@ -65,7 +67,6 @@
             .links a {
                 font-size: 1.5625rem;
                 margin: 0 1.875rem;
-                /* Adjust as needed */
             }
 
             .icons {
@@ -284,6 +285,30 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+@media (max-width: 600px) {
+        .navbar {
+            display: flex;
+            flex-direction: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar .links,
+        .navbar .icons {
+            flex-direction: column;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .navbar .logo {
+            width: 1.5625; /* Riduci la larghezza del logo */
+        }
+
+        .navbar .logo-name {
+            font-size: 1rem; /* Riduci la dimensione delle scritte */
+        }
+    }
         </style>
     </head>
 
@@ -293,11 +318,9 @@ input:checked + .slider:before {
             <a href="catalogo.jsp" class="a1">
                 <img src="immagini/gatto-skate.png" alt="Logo" class="logo">
             </a>
-                <div class="logo-name"><a href="catalogo.jsp" class="a1">YourSkates <i class="fa fa-home" style="margin-left: 10px;"></i></a></div>
+                <div class="logo-name"><a href="catalogo.jsp" class="a1">YourSkates <i class="fa fa-home" style="margin-left: 0.625rem;"></i></a></div>
             <div class="links">
-                <a href="#Contatti">Contatti</a>
                 <a href="catalogo.jsp">Prodotti</a>
-                <a href="#Portfolio">Portfolio</a>
             </div>
             <div class="icons">
                 <a href="utente.jsp"><i class="fa fa-user"></i></a>

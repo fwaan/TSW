@@ -50,4 +50,4 @@ INSERT INTO prodotto values (3,"Cuscinetti","Gommini skateboard medi","Gommini p
 INSERT INTO prodotto values (4,"Carrello","Carrello in acciaio inox","Carrello durevole prodotto dalla YourSkates&Fabbrication",15,1000);
 INSERT INTO prodotto values (5,"Asse","Legno di acero","Miglior legno per una tavola, durevole e flessibile come nessun altro",50,100);
 INSERT INTO prodotto values (6,"Asse","Carbonio","Materiale per l'asse per i più esperti skaters[NON ADATTO A PRINCIPIANTI]",100,50);
-INSERT INTO utente values ("YourSkatesAdminUserID","Admin","0b575dc9bb48efa5fbf2eef15cb26c1129b3d5a085ba631e7f36b62bc912e1fb");
+INSERT INTO utente (userid, tipo, password_hash) values ("YourSkatesAdminUserID","Admin","0b575dc9bb48efa5fbf2eef15cb26c1129b3d5a085ba631e7f36b62bc912e1fb");

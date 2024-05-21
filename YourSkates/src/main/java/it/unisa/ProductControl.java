@@ -55,6 +55,10 @@ public class ProductControl extends HttpServlet {
 					else{
 						//utente non registrato
 						try {
+							String indirizzo = request.getParameter("indirizzo");
+							String citta = request.getParameter("citta");
+							String provincia = request.getParameter("provincia");
+							String cap = request.getParameter("cap");
 							MessageDigest md = MessageDigest.getInstance("SHA-256");
 							byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
 							BigInteger number = new BigInteger(1, hash);
@@ -67,6 +71,13 @@ public class ProductControl extends HttpServlet {
 							user.setPasswordHash(hashedPassword);
 							user.setTipo("Customer");
 							model.doSaveUser(user);
+							user.setUserid(userid);
+							user.setIndirizzo(indirizzo);
+							user.setCitta(citta);
+							user.setProvincia(provincia);
+							user.setCAP(cap);
+							model.doChangeUserLocation(user);
+
 							request.removeAttribute("registrato");
 							request.setAttribute("registrato", "false");
 							request.removeAttribute("registrazione");
