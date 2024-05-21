@@ -142,7 +142,7 @@
                 left: 0;
                 bottom: 0;
                 width: 100%;
-                margin-top: 5%;
+                margin-top: 15%;
                 border-top: #ffffff 0.125rem solid;
             }
 
