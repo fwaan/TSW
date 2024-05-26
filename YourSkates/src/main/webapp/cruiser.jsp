@@ -1,5 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ include file="header.jsp" %>
 <%@ page import="it.unisa.ProductBean" %>
 <%@ page import="java.util.stream.Collectors" %>
 
@@ -28,6 +27,7 @@ if(prodotti == null){
     .collect(Collectors.toList());
 }
 %>
+<%@ include file="header.jsp" %>
 <script>
     function updateImage(color) {
         var imgElement = document.querySelector('.hover-image');
@@ -41,7 +41,19 @@ if(prodotti == null){
         var selectedOption = selectElement.options[selectElement.selectedIndex];
         var description = selectedOption.getAttribute('data-description');
         var prezzo = selectedOption.getAttribute('data-price');
-        document.getElementById(descriptionElementId).innerText = description;
+
+        // Create a temporary div element
+        var tempDiv = document.createElement('div');
+        // Set its innerHTML with the description
+        tempDiv.innerHTML = description;
+        // Get the interpreted text
+        var interpretedDescription = tempDiv.innerText;
+
+        var descriptionElement = document.getElementById(descriptionElementId);
+        descriptionElement.innerHTML = interpretedDescription;
+        var text = descriptionElement.innerHTML;
+        text = text.replace(/&amp;/g, '&').replace(/&/g, '<span class="special-char">&</span>');
+        descriptionElement.innerHTML = text;
         document.getElementById(prezzoElementId).innerText = ' \u20AC ' + prezzo;
     }
     window.onload = function() {
@@ -52,22 +64,31 @@ if(prodotti == null){
     }
 </script>
 <div class="container">
-    <div class="image-container">
+    <div class="image-container-sell">
         <img src="immagini/cruiser.png" alt="Cruiser" class="hover-image">
     </div>
     <div class="form-container">
         <form action="ProductControl?action=addCartCruiser" method="post">
             <p class="image-caption2">Cruiser</p>
             <div class="radio-container" style="margin-bottom: 0.0625rem;">
-                <input type="radio" id="nero" name="colore" value="nero" onclick="updateImage('nero')" style="background-color: black;" checked>
-                <label for="nero">Nero</label>
-                <input type="radio" id="rosso" name="colore" value="rosso" onclick="updateImage('rosso')" style="background-color: red;">
-                <label for="rosso">Rosso</label>
-                <input type="radio" id="blu" name="colore" value="blu" onclick="updateImage('blu')" style="background-color: blue;">
-                <label for="blu">Blu</label>
-                <input type="radio" id="verde" name="colore" value="verde" onclick="updateImage('verde')" style="background-color: green;">
-                <label for="verde">Verde</label>
+                <div class="radio-option">
+                    <input type="radio" id="nero" name="colore" value="nero" onclick="updateImage('nero')" style="background-color: black;" checked>
+                    <label for="nero">Nero</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="rosso" name="colore" value="rosso" onclick="updateImage('rosso')" style="background-color: red;">
+                    <label for="rosso">Rosso</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="blu" name="colore" value="blu" onclick="updateImage('blu')" style="background-color: blue;">
+                    <label for="blu">Blu</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="verde" name="colore" value="verde" onclick="updateImage('verde')" style="background-color: green;">
+                    <label for="verde" >Verde</label>
+                </div>
             </div>
+            <br>
             <label for="asse"
             >Asse:</label><br>
             <div class="select-container">

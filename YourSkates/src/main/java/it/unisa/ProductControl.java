@@ -31,11 +31,11 @@ public class ProductControl extends HttpServlet {
 	static {
 		model = new ProductModelDS();
 	}
-
+	
 	public ProductControl() {
 		super();
 	}
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

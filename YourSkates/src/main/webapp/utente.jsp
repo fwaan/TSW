@@ -89,7 +89,7 @@
         border-radius: 4px;
         padding: 10px;
         margin-bottom: 10px;
-        width: 100%;
+        width: 80%;
         box-sizing: border-box;
     }
 
@@ -121,14 +121,39 @@
         width: 100%;
         overflow-x: auto;
     }
-    @media (max-width: 600px) {
+    #loginForm label, #registerForm label, #loginForm h2, #registerForm h2, #loginForm h3, #registerForm h3{
+        font-family: Titoli-Skateboard;
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+    #loginForm button, #registerForm button, #loginForm input[type="submit"], #registerForm input[type="submit"] {
+        font-family: Titoli-Skateboard;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    }
+    #loginForm button, #registerForm button {
+        margin-top: 0.125rem;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #loginForm button, #registerForm button {
+        background-color: #4CAF50;
+    }
+    .responsive-table div strong {
+        font-family: Titoli-Skateboard;
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+        color: #333;
+    }
+    @media (max-width: 650px) {
         #loginForm {
             padding: 10px;
         }
 
         #loginForm input[type="text"],
         #loginForm input[type="password"] {
-            width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+            width: 80%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
             box-sizing: border-box; /* Include padding e border nella larghezza totale */
         }
 
@@ -149,8 +174,42 @@
             width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
         }
         .responsive-table {
+            display: block;
             width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+            min-width: 0;
+            overflow-x: auto;
         }
+        .responsive-table div input{
+            width: 100%;
+            min-width: 0;
+        }
+        #loginForm, #registerForm {
+    width: 100%;
+    padding: 1rem;
+}
+
+/* Stili specifici per schermi di dimensioni inferiori a 650px */
+@media (max-width: 650px) {
+    #loginForm, #registerForm {
+        max-width: 80%;
+        font-size: 0.875rem;
+    }
+}
+/* Stili specifici per schermi di dimensioni comprese tra 600px e 1200px */
+@media (min-width: 650px) and (max-width: 1200px) {
+    #loginForm, #registerForm {
+        max-width: 75%;
+        font-size: 0.9rem;
+    }
+}
+
+/* Stili specifici per schermi di dimensioni superiori a 1200px */
+@media (min-width: 1200px) {
+    #loginForm, #registerForm {
+        max-width: 50%;
+        font-size: 1.25rem;
+    }
+}
     }
 </style>
 <div id="loginForm">
@@ -181,22 +240,22 @@
         <label for="confirmPassword">Conferma Password:</label><br>
         <input type="password" id="confirmPassword" name="confirmPassword" required>
         <button type="button" onmousedown="showPassword('confirmPassword')" onmouseup="hidePassword('confirmPassword')"><i class="fa fa-eye" aria-hidden="true"></i></button><br>
-        <div class="responsive-table" style="background-color: #f2f2f2; color: black; padding: 10px; display: flex; flex-direction: column;">
+        <div class="responsive-table" style="background-color: #f2f2f2; color: black; display: flex; flex-direction: column;">
             <div style="display: flex; flex-direction: row; align-items: center;">
                 <div style="flex: 1;"><strong>Indirizzo</strong></div>
-                <div style="flex: 1;"><input type="text" name="indirizzo" value="" required style="min-width: 8rem; width: 100%; box-sizing: border-box;"></div>
+                <div style="flex: 1;"><input type="text" name="indirizzo" value="" required style="min-width: 8rem; width: 90%; box-sizing: border-box;"></div>
             </div>
             <div style="display: flex; flex-direction: row; align-items: center;">
                 <div style="flex: 1;"><strong>Città</strong></div>
-                <div style="flex: 1;"><input type="text" name="citta" value="" required style="min-width: 8rem; width: 100%; box-sizing: border-box;"></div>
+                <div style="flex: 1;"><input type="text" name="citta" value="" required style="min-width: 8rem; width: 90%; box-sizing: border-box;"></div>
             </div>
             <div style="display: flex; flex-direction: row; align-items: center;">
                 <div style="flex: 1;"><strong>Provincia</strong></div>
-                <div style="flex: 1;"><input type="text" name="provincia" value="" required style="min-width: 8rem; width: 100%; box-sizing: border-box;"></div>
+                <div style="flex: 1;"><input type="text" name="provincia" value="" required style="min-width: 8rem; width: 90%; box-sizing: border-box;"></div>
             </div>
             <div style="display: flex; flex-direction: row; align-items: center;">
                 <div style="flex: 1;"><strong>CAP</strong></div>
-                <div style="flex: 1;"><input type="text" name="cap" value="" maxlength="10" required style="min-width: 4rem; width: 100%; box-sizing: border-box;"></div>
+                <div style="flex: 1;"><input type="text" name="cap" value="" maxlength="10" required style="min-width: 4rem; width: 90%; box-sizing: border-box;"></div>
             </div>
         </div>
         <input type="submit" value="Registra">
@@ -256,23 +315,35 @@ function showLoginForm() {
         String tipo = (String) session.getAttribute("tipo");
         if (tipo != null && tipo.equals("Admin")){
             %>
-            <button type="button" onclick="location.href='amministratore-yourskates.jsp'">Pagina admin</button>
+            <button class="admin" type="button" onclick="location.href='amministratore-yourskates.jsp'">Pagina admin</button>
             <%
             
         }
         if(tipo != null) {
 %>
-    <h2 style="color: white;">Benvenuto, <%= userid %>!</h2>
+    <h2 style="color: black;text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-family: Titoli-Skateboard; font-size: 2rem;">Benvenuto, <%= userid %>!</h2>
     <form action="ProductControl?action=logoututente" method="post">
         <input type="hidden" name="action" value="logout">
-        <input type="submit" value="Logout">
+        <input type="submit" value="Logout" style="font-family: Titoli-Skateboard;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+        background-color: #eebf70; 
+        border: none; 
+        color: white; 
+        padding: 0.9375rem 2rem; 
+        text-align: center; 
+        text-decoration: none; 
+        display: inline-block;
+        font-size: 1rem;
+        margin: 0.25rem 0.125rem;
+        cursor: pointer;
+        border-radius: 0.25rem;">
     </form>
     <div style="display: flex; align-items: center;">
         <label class="switch" style="margin-top: 0.625rem;">
             <input type="checkbox" id="toggleSwitch">
             <span class="slider round"></span>
         </label>
-        <p style="color: white; margin-left: 0.625rem;">Informazioni utente</p>
+        <p style="color: black; font-family: Titoli-Skateboard; margin-left: 0.625rem; font-size: 1.25rem;">Informazioni utente</p>
     </div>
     <div id="userInfo" style="display: none;">
         <form action="ProductControl?action=changeUserLocation" method="post">
@@ -280,10 +351,10 @@ function showLoginForm() {
             <div style="width: 40%;">
                 <table style="background-color: white; color: black; border: 0.125rem solid black; width: 100%; height: 10%; border-collapse: collapse;">
                     <tr>
-                        <th style="border: 0.125rem solid black;">Indirizzo</th>
-                        <th style="border: 0.125rem solid black;">Città</th>
-                        <th style="border: 0.125rem solid black;">Provincia</th>
-                        <th style="border: 0.125rem solid black;">CAP</th>
+                        <th style="border: 0.125rem solid black;text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;font-family: Titoli-Skateboard;">Indirizzo</th>
+                        <th style="border: 0.125rem solid black;text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;font-family: Titoli-Skateboard">Città</th>
+                        <th style="border: 0.125rem solid black;text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;font-family: Titoli-Skateboard">Provincia</th>
+                        <th style="border: 0.125rem solid black;text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;font-family: Titoli-Skateboard">CAP</th>
                     </tr>
                     <tr>
                         <td style="border: 0.125rem solid black;"><input type="text" name="indirizzo" value="<%= user.getIndirizzo() != null ? user.getIndirizzo() : "" %>" required style="width: 100%; box-sizing: border-box;"></td>
@@ -292,7 +363,7 @@ function showLoginForm() {
                         <td style="border: 0.125rem solid black;"><input type="text" name="cap" value="<%= user.getCAP() != null ? user.getCAP() : "" %>" maxlength="10" required style="width: 100%; box-sizing: border-box;"></td>
                     </tr>
                 </table>
-                <input type="submit" value="EFFETTUA MODIFICHE" style="width: 100%; height: 1.5rem; border-radius: 0.25rem; font-weight: bolder; font-size: 1.1rem;">
+                <input type="submit" value="EFFETTUA MODIFICHE" style="width: 100%; height: 1.5rem; border-radius: 0.25rem; font-weight: bolder; font-size: 1.1rem; min-width: 13.1rem;">
             </div>
         </form>
     </div>
@@ -306,7 +377,7 @@ function showLoginForm() {
             }
         });
     </script>
-    <p style="color: white;">Qui è la tua lista degli ordini:</p>
+    <p style="color: black; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-family: Titoli-Skateboard; font-size: 2rem;">Qui è la tua lista degli ordini:</p>
     <%
     if (orders != null && !orders.isEmpty()) {
 %>
@@ -398,7 +469,7 @@ function showLoginForm() {
         <tr>
             <td class="img-column"><img src="<%= imagePath %>" alt="<%= order.getTipoSkateboard() %>"></td>
             <td ><%= order.getTipoSkateboard() %></td>
-            <td style="background-color: <%= color %>;"><span style="color: white; text-transform: uppercase; font-weight: bolder; font-family: Arial, Helvetica, sans-serif;"><%= order.getColore() %></span></td>
+            <td style="background-color: <%= color %>;"><span style="color: white; font-family: Titoli-Skateboard; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; text-transform: uppercase; font-weight: bolder; font-family: Arial, Helvetica, sans-serif;"><%= order.getColore() %></span></td>
             <td><%= order.getNomeAsse() %></td>
             <td><%= order.getNomeCarrello() %></td>
             <td><%= order.getNomeCuscinetti() %></td>
@@ -412,7 +483,7 @@ function showLoginForm() {
 <%
     } else {
 %>
-    <p style="color: white;">Non hai ancora effettuato ordini.</p>
+    <p style="color: black; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-family: Titoli-Skateboard; font-weight: bold; font-size: 3rem;">Non hai ancora effettuato ordini.</p>
 <%
     }
 %>
