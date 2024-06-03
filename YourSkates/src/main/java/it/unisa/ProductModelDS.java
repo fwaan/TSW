@@ -230,6 +230,36 @@ public class ProductModelDS implements ProductModel {
 		}
 	}
 
+	public synchronized void doChangeUserPaymentMethod(UserBean utente) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+	
+		String updateSQL = "UPDATE " + ProductModelDS.TABLE_NAME2 
+				+ " SET metodo_pagamento = ? WHERE userid = ?";
+	
+		try {
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(updateSQL);
+			preparedStatement.setString(1, utente.getMetodoPagamento());
+			preparedStatement.setString(2, utente.getUserid());
+	
+			preparedStatement.executeUpdate();
+	
+			connection.commit();
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null){
+					connection.setAutoCommit(true);
+					connection.close();
+				}
+			}
+		}
+	}
+
 	@Override
 	public synchronized ProductBean doRetrieveByKey(int id) throws SQLException {
 		Connection connection = null;
@@ -266,6 +296,51 @@ public class ProductModelDS implements ProductModel {
 		}
 		return bean;
 	}
+
+	public OrderBean doRetrieveByKeyOrder(int id) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		OrderBean ordine = new OrderBean();
+
+		String selectSQL = "SELECT * FROM ordine WHERE id = ?";
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setInt(1, id);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				ordine.setId(rs.getInt("id"));
+				ordine.setUserid(rs.getString("userid"));
+				ordine.setTipoSkateboard(rs.getString("tipo_skateboard"));
+				ordine.setColore(rs.getString("colore"));
+				ordine.setIdAsse(rs.getInt("id_asse"));
+				ordine.setIdCarrello(rs.getInt("id_carrello"));
+				ordine.setIdCuscinetti(rs.getInt("id_cuscinetti"));
+				ordine.setIdRuote(rs.getInt("id_ruote"));
+				ordine.setPrezzo(rs.getFloat("prezzo"));
+				ordine.setIndirizzo(rs.getString("indirizzo"));
+				ordine.setCitta(rs.getString("citta"));
+				ordine.setProvincia(rs.getString("provincia"));
+				ordine.setCAP(rs.getString("CAP"));
+				ordine.setDataOrdine(rs.getTimestamp("dataordine"));
+			}
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+
+		return ordine;
+	}
 	
 	@Override
 	public UserBean doRetrieveByKeyUser(String userid) throws SQLException {
@@ -290,6 +365,7 @@ public class ProductModelDS implements ProductModel {
 				bean.setCitta(rs.getString("citta"));
 				bean.setProvincia(rs.getString("provincia"));
 				bean.setCAP(rs.getString("CAP"));
+				bean.setMetodoPagamento(rs.getString("metodo_pagamento"));
 				return bean;
 			}
 
@@ -385,6 +461,7 @@ public class ProductModelDS implements ProductModel {
 				bean.setCitta(rs.getString("citta"));
 				bean.setProvincia(rs.getString("provincia"));
 				bean.setCAP(rs.getString("CAP"));
+				bean.setMetodoPagamento(rs.getString("metodo_pagamento"));
 				return bean;
 			}
 
@@ -517,6 +594,54 @@ public class ProductModelDS implements ProductModel {
 	
 		return prodotti;
 	}
+
+	public List<OrderBean> doRetrieveAllOrder() throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        List<OrderBean> orders = new ArrayList<OrderBean>();
+
+        String selectSQL = "SELECT * FROM ordine";
+
+        try {
+            connection = ds.getConnection();
+            preparedStatement = connection.prepareStatement(selectSQL);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                OrderBean bean = new OrderBean();
+
+                bean.setId(rs.getInt("id"));
+                bean.setUserid(rs.getString("userid"));
+                bean.setTipoSkateboard(rs.getString("tipo_skateboard"));
+                bean.setColore(rs.getString("colore"));
+                bean.setIdAsse(rs.getInt("id_asse"));
+                bean.setIdCarrello(rs.getInt("id_carrello"));
+                bean.setIdCuscinetti(rs.getInt("id_cuscinetti"));
+                bean.setIdRuote(rs.getInt("id_ruote"));
+                bean.setPrezzo(rs.getFloat("prezzo"));
+                bean.setIndirizzo(rs.getString("indirizzo"));
+                bean.setCitta(rs.getString("citta"));
+                bean.setProvincia(rs.getString("provincia"));
+                bean.setCAP(rs.getString("CAP"));
+                bean.setDataOrdine(rs.getTimestamp("dataordine"));
+
+                orders.add(bean);
+            }
+
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return orders;
+    }
 
 	public Collection<ProductBean> getProductsByType(String tipo) throws SQLException {
 		Connection connection = null;

@@ -10,6 +10,14 @@
     ProductBean prodotto = (ProductBean) request.getAttribute("prodotto");
 %>
 <style>
+    th,td,input[type="text"],input[type="number"],textarea,select {
+        font-size: 1rem;
+    }
+    @media (max-width: 1150px) {
+        th,td,input[type="text"],input[type="number"],textarea,select{
+        font-size: 0.85rem;
+        }
+    }
     @media (min-width: 991px) {
         .desktop-header {
             display: table-row !important;
@@ -23,7 +31,7 @@
         }
         .table-container table {
     width: 100%;  /* Aumenta la larghezza al 100% */
-    min-width: 25rem;
+    min-width: 23rem;
 }
 
         .table-container table,
@@ -60,26 +68,26 @@
         }
     }
 </style>
-    <h3 style="color: white;"><a href="amministratore-yourskates.jsp" style="text-decoration: none; color: white;"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h3>
+    <h3 style="color: black; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;"><a href="amministratore-yourskates.jsp" style="text-decoration: none; color: black; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;"><i class="fa fa-arrow-circle-left" aria-hidden="true" style="font-size: 3rem;"></i></a></h3>
     <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-    <h2 style="color: white;">Dettagli</h2>
+    <h2 style="color: black; font-family: Titoli-Skateboard; letter-spacing: 0.05rem; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-size: 3rem;">Dettagli</h2>
     <form action="ProductControl?action=change" method="post">
     <%
         if (prodotto != null) {
     %>
     <div class="table-container">
-        <table border="1" style="background-color: rgba(238, 191, 112, 1); width: 100%;">
-            <tr class="desktop-header">
-                <th>ID</th>
-                <th>Tipo</th>
-                <th>Nome</th>
-                <th>Descrizione</th>
-                <th>Prezzo</th>
+        <table style="background-color: rgba(238, 191, 112, 1); width: 100%; border: 1px solid black; border-collapse: collapse;">
+            <tr class="desktop-header" style="border: 1px solid black;">
+                <th style="border-right: 1px solid black;">ID</th>
+                <th style="border-right: 1px solid black;">Tipo</th>
+                <th style="border-right: 1px solid black;">Nome</th>
+                <th style="border-right: 1px solid black;">Descrizione</th>
+                <th style="border-right: 1px solid black;">Prezzo</th>
                 <th>Quantita</th>
             </tr>
             <tr>
-                <td data-column="ID"><input type="text" name="id" value="<%=prodotto.getId()%>" readonly></td>
-                <td data-column="Tipo">
+                <td data-column="ID" style="border-right: 1px solid black;"><input type="text" name="id" value="<%=prodotto.getId()%>" readonly></td>
+                <td data-column="Tipo" style="border-right: 1px solid black;">
                     <select id="tipo" name="tipo">
                         <option value="Asse" <%=prodotto.getTipo().equals("Asse") ? "selected" : ""%>>Asse</option>
                         <option value="Carrello" <%=prodotto.getTipo().equals("Carrello") ? "selected" : ""%>>Carrello</option>
@@ -87,10 +95,10 @@
                         <option value="Ruote" <%=prodotto.getTipo().equals("Ruote") ? "selected" : ""%>>Ruote</option>
                     </select>
                 </td>
-                <td data-column="Nome"><input name="nome" type="text" maxlength="20" required placeholder="Inserisci nome" value="<%=prodotto.getNome()%>"></td>
-                <td data-column="Descrizione"><textarea name="descrizione" maxlength="100" rows="3" required><%=prodotto.getDescrizione()%></textarea></td>
-                <td data-column="Prezzo"><input name="prezzo" type="text" pattern="^\d+(\.\d{1,2})?$" title="Inserisci un numero valido. Massimo due cifre decimali." required value="<%=prodotto.getPrezzo()%>"></td>
-                <td data-column="Quantita"><input name="quantita" type="number" min="1" value="<%=prodotto.getQuantita()%>" required></td>
+                <td data-column="Nome" style="border-right: 1px solid black;"><input name="nome" type="text" maxlength="20" required placeholder="Inserisci nome" value="<%=prodotto.getNome()%>"></td>
+                <td data-column="Descrizione" style="border-right: 1px solid black;"><textarea name="descrizione" maxlength="100" rows="3" required><%=prodotto.getDescrizione()%></textarea></td>
+                <td data-column="Prezzo" style="border-right: 1px solid black;"><input name="prezzo" type="text" pattern="^\d+(\.\d{1,2})?$" title="Inserisci un numero valido. Massimo due cifre decimali." required value="<%=prodotto.getPrezzo()%>"></td>
+                <td data-column="Quantita" style="border-right: 1px solid black;"><input name="quantita" type="number" min="1" value="<%=prodotto.getQuantita()%>" required></td>
             </tr>
         </table>
     </div>

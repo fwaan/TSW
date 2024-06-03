@@ -1,6 +1,7 @@
 package it.unisa;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class OrderBean implements Serializable {
 
@@ -23,6 +24,7 @@ public class OrderBean implements Serializable {
     private String citta;
     private String provincia;
     private String CAP;
+    private Timestamp dataOrdine;
 
     public OrderBean() {
     }
@@ -161,5 +163,13 @@ public class OrderBean implements Serializable {
 
     public void setCAP(String CAP) {
         this.CAP = CAP;
+    }
+
+    public Timestamp getDataOrdine() {
+        return dataOrdine;
+    }
+
+    public void setDataOrdine(Timestamp dataOrdine) {
+        this.dataOrdine = dataOrdine;
     }
 }

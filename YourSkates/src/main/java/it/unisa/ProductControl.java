@@ -1,9 +1,15 @@
 package it.unisa;
 
+import java.util.Date;
+import java.util.Calendar;
 import java.util.Iterator;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +21,24 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
+import com.google.gson.Gson;
 
 /**
  * Servlet implementation class ProductControl
@@ -88,7 +112,40 @@ public class ProductControl extends HttpServlet {
 					}
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/utente.jsp");
 					dispatcher.forward(request, response);
-				}else if (action.equalsIgnoreCase("addCartSkateboard")) {
+				} else if (action.equalsIgnoreCase("generateInvoice")) {
+					OrderBean order = model.doRetrieveByKeyOrder(Integer.parseInt(request.getParameter("orderId")));
+					String invoicePath = generateInvoice(response, order);
+    				String invoiceUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/invoices/invoice"+request.getParameter("orderId")+".pdf";
+    				response.setContentType("application/json");
+    				response.getWriter().write("{\"url\": \"" + invoiceUrl + "\"}");
+				} else if (action.equalsIgnoreCase("verificaEmail")) {
+					String userid = request.getParameter("email");
+					UserBean existingUser = model.doRetrieveByKeyUser(userid);
+					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
+					if(existingUser != null){
+						//utente già registrato
+						response.getWriter().write("{\"exists\": true}");
+					} else{
+						//utente non registrato
+						response.getWriter().write("{\"exists\": false}");
+					}
+				} else if (action.equalsIgnoreCase("checkInvoice")) {
+					int orderId = Integer.parseInt(request.getParameter("orderId"));
+					boolean invoiceReady = isInvoiceReady(orderId);
+				
+					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
+					// Create the JSON string manually
+					String jsonResponse;
+					if (invoiceReady) {
+						String invoiceUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/invoices/invoice"+orderId+".pdf";
+						jsonResponse = "{\"invoiceReady\": true, \"url\": \"" + invoiceUrl + "\"}";
+					} else {
+						jsonResponse = "{\"invoiceReady\": false}";
+					}
+					response.getWriter().write(jsonResponse);
+				} else if (action.equalsIgnoreCase("addCartSkateboard")) {
 					// Ottieni la sessione corrente. Se non esiste, ne crea una nuova.
 					HttpSession session = request.getSession();
 	
@@ -223,6 +280,12 @@ public class ProductControl extends HttpServlet {
 					request.setAttribute("prodotto", model.doRetrieveByKey(id));
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/dettagli-prodotto.jsp");
 					dispatcher.forward(request, response);
+				} else if (action.equalsIgnoreCase("readdetailsorder")) {
+					int id = Integer.parseInt(request.getParameter("id"));
+					request.removeAttribute("ordine");
+					request.setAttribute("ordine", model.doRetrieveByKeyOrder(id));
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/dettagli-ordine.jsp");
+					dispatcher.forward(request, response);
 				} else if (action.equalsIgnoreCase("delete")) {
 					int id = Integer.parseInt(request.getParameter("id"));
 					model.doDelete(id);
@@ -330,6 +393,29 @@ public class ProductControl extends HttpServlet {
 				
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/utente.jsp");
 					dispatcher.forward(request, response);
+				} else if(action.equalsIgnoreCase("changeUserPM")){
+					//Cambiamento metodo di pagamento
+					String userid = request.getParameter("userid");
+					String metodo_pagamento = request.getParameter("payment-method");
+					if ("credit-card".equals(metodo_pagamento)){
+						metodo_pagamento = "Carta di credito";
+					}
+					if ("paypal".equals(metodo_pagamento)){
+						metodo_pagamento = "PayPal";
+					}
+
+					UserBean bean = new UserBean();
+					bean.setUserid(userid);
+					bean.setMetodoPagamento(metodo_pagamento);
+					model.doChangeUserPaymentMethod(bean);
+
+					bean = model.doRetrieveByKeyUser(userid);
+
+					request.removeAttribute("user");
+					request.getSession().setAttribute("user", bean);
+
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/utente.jsp");
+					dispatcher.forward(request, response);
 				} else if (action.equalsIgnoreCase("skateboard")) {
 
 					request.removeAttribute("prodotti");
@@ -354,6 +440,8 @@ public class ProductControl extends HttpServlet {
 
 					request.removeAttribute("prodotti");
 					request.setAttribute("prodotti",model.doRetrieveAll("id"));
+					request.removeAttribute("ordiniAmministratore");
+					request.setAttribute("ordiniAmministratore",model.doRetrieveAllOrder());
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/amministratore-yourskates.jsp");
 					dispatcher.forward(request, response);
 				}else if (action.equalsIgnoreCase("ordini")) {
@@ -389,6 +477,211 @@ public class ProductControl extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
+	}
+
+	private String generateInvoice(HttpServletResponse response, OrderBean order) {
+		String filePath = null;
+		try {
+			// Create a new Document
+			Document document = new Document();
+
+			filePath = getServletContext().getRealPath("/invoices/invoice"+String.valueOf(order.getId())+".pdf");
+			// Create a new PdfWriter
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(filePath)));
+
+			document.open();
+
+			// Set the font
+			Font font = FontFactory.getFont("Arial", 24, Font.BOLD, BaseColor.BLACK);
+
+			// Add the invoice title
+			document.add(new Paragraph("FATTURA", font));
+
+			// Add the logo
+			Image logo = Image.getInstance(getServletContext().getRealPath("/immagini/gatto-skate.png"));
+			logo.scaleToFit(100, 100);
+			float yPos = PageSize.A4.getHeight() - logo.getScaledHeight() - (PageSize.A4.getHeight() * 0.05f);
+			logo.setAbsolutePosition(PageSize.A4.getWidth() - logo.getScaledWidth() - (PageSize.A4.getWidth() * 0.05f), yPos);
+			document.add(logo);
+
+			// Add the company name
+			font = FontFactory.getFont("Arial", 16, Font.NORMAL, BaseColor.BLACK);
+			document.add(new Paragraph("YourSkates", font));
+			document.add(new Chunk("\n"));
+
+			// Add the bill to information
+			document.add(new Phrase("INDIRIZZO FATTURA:"));
+			document.add(new Paragraph(order.getIndirizzo()+ ", " + order.getCitta() + ", " + order.getProvincia() + ", " + order.getCAP(), font));
+			document.add(new Chunk("\n"));
+
+			// Create a new PdfPTable with 2 columns
+			// Create a new PdfPTable with 2 columns
+			PdfPTable tableheader = new PdfPTable(2);
+			tableheader.setWidthPercentage(100);
+
+			// Add the invoice number to the left cell
+			Phrase phrase = new Phrase();
+			phrase.add(new Chunk("FATTURA #: "));
+			phrase.add(new Chunk(String.valueOf(order.getId()), FontFactory.getFont("Arial", 16, Font.NORMAL, BaseColor.BLACK)));
+			PdfPCell cell = new PdfPCell(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setBorder(Rectangle.NO_BORDER);
+			tableheader.addCell(cell);
+
+			// Add the invoice date to the right cell
+			phrase = new Phrase();
+			phrase.add(new Chunk("DATA FATTURA: "));
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			// Get the date in the original timezone
+			Date originalDate = order.getDataOrdine();
+
+			// Create a calendar and set its time with the original date
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(originalDate);
+
+			// Add 2 hours to the calendar time
+			calendar.add(Calendar.HOUR_OF_DAY, -2);
+
+			// Create a new date with the adjusted time
+			Date adjustedDate = calendar.getTime();
+
+			// Format the adjusted date
+			phrase.add(new Chunk(sdf.format(adjustedDate)));
+			cell = new PdfPCell(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setBorder(Rectangle.NO_BORDER);
+			tableheader.addCell(cell);
+
+			// Add the table to the document
+			document.add(tableheader);
+
+			// Create a new PdfPTable for the description and amount table
+			PdfPTable table = new PdfPTable(3); // 3 colonne
+			table.setWidthPercentage(100);
+			table.setSpacingBefore(20);
+
+			// Add the table headers
+			cell = new PdfPCell(new Phrase("QUANTITA"));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("DESCRIZIONE"));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("PREZZO"));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			// Add the table row
+			cell = new PdfPCell(new Phrase("1")); // Quantità
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(order.getTipoSkateboard())); // Descrizione
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			float totaleprezzo = order.getPrezzo();
+			float iva = totaleprezzo * 22 / 100;
+			float subtotale = totaleprezzo - iva;
+
+			cell = new PdfPCell(new Phrase("€"+String.valueOf(subtotale))); // Prezzo
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+			cell = new PdfPCell(new Phrase(" "));
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+			cell = new PdfPCell(new Phrase(" "));
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+			cell = new PdfPCell(new Phrase(" "));
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			// Add the subtotal, IVA, and total information
+			cell = new PdfPCell(new Phrase("")); // Celda vacía para la cantidad
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("Subtotale  :"));
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("€"+String.valueOf(subtotale)));
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("")); // Celda vacía para la cantidad
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("IVA 22.0%:"));
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("€"+String.valueOf(iva)));
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			font = FontFactory.getFont("Arial", 16, Font.BOLD, BaseColor.BLACK);
+			cell = new PdfPCell(new Phrase("")); // Celda vacía para la cantidad
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("TOTALE", font));
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("€"+String.valueOf(totaleprezzo), font));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setBorder(Rectangle.NO_BORDER);
+			table.addCell(cell);
+
+			// Add the table to the document
+			document.add(table);
+
+			// Close the Document
+			document.close();
+
+			// Close the PdfWriter
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return filePath;
+	}
+
+	public boolean isInvoiceReady(int orderId) {
+		String filePath = getServletContext().getRealPath("/invoices/invoice" + orderId + ".pdf");
+		File file = new File(filePath);
+		return file.exists();
+	}
+
+	public class JsonResponse {
+		private String status;
+	
+		public JsonResponse(String status) {
+			this.status = status;
+		}
+	
+		public String getStatus() {
+			return status;
+		}
+	
+		public void setStatus(String status) {
+			this.status = status;
+		}
 	}
 
 }

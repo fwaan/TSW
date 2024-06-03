@@ -11,11 +11,15 @@
         <style>
             @font-face{
                 font-family: 'Titoli-Skateboard';
-                src:url('font-esterni/Bubbleboddy-FatTrial.ttf')
+                src:url('font-esterni/Bubbleboddy-FatTrial.ttf');
             }
             @font-face{
                 font-family: 'Font-Carino';
-                src:url('font-esterni/PermanentMarker-Regular.ttf')
+                src:url('font-esterni/PermanentMarker-Regular.ttf');
+            }
+            @font-face{
+                font-family: 'Roboto-Serif';
+                src:url('font-esterni/Roboto_Serif/RobotoSerif-VariableFont_GRAD\,opsz\,wdth\,wght.ttf');
             }
             body, .navbar{
                 margin: 0;
@@ -325,7 +329,7 @@ input[type='radio']:checked::after {
         height: auto; /* Imposta l'altezza del carrello */
         margin: 2% auto 20%; /* Centra il quadrato orizzontalmente */
         border: 0.0625rem solid #000; /* Aggiunge un bordo al quadrato */
-        background-color: #e7dcf2;
+        background-color: #f2f2f2;
         border-radius: 0.375rem;
     }
     .order-title {

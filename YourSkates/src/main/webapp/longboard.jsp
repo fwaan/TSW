@@ -63,6 +63,23 @@ if(prodotti == null){
         updateDescription(document.getElementById('ruote'), 'ruoteDescription', 'ruotePrezzo');
     }
 </script>
+<style>
+    input[type="submit"] {
+        background-color: #ffffff;
+        color: black;
+        padding: 14px 20px;
+        border: 2px black solid;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: Titoli-Skateboard;
+        font-size: 1.25rem;
+        letter-spacing: 0.05rem;
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+    input[type="submit"]:hover {
+        background-color: #b8c6c6;  /* Cambia il colore di sfondo al passaggio del mouse */
+    }
+</style>
 <div class="container">
     <div class="image-container-sell">
         <img src="immagini/longboard.png" alt="Longboard" class="hover-image">
@@ -156,7 +173,7 @@ if(prodotti == null){
             <div style="display: flex; justify-content: space-between; align-items: center;">
             <input type="submit" value="Add to cart">
             <% if("true".equals(request.getAttribute("verificatarocca"))){ %>
-                <p style="text-align: center; font-weight: bold; margin: 0;">
+                <p style="text-align: center; font-weight: bold; margin: 0;  font-family: Titoli-Skateboard; letter-spacing: 0.05rem; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">
                     <i class="fa fa-check-circle" aria-hidden="true" style="margin-right: 0.3125rem;"></i>
                     Aggiunto al carrello con successo
                     <i class="fa fa-check-circle" aria-hidden="true" style="margin-left: 0.3125rem;"></i>

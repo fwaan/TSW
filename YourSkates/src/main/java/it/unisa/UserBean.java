@@ -9,6 +9,7 @@ public class UserBean implements java.io.Serializable {
     private String citta;
     private String provincia;
     private String CAP;
+    private String metodo_pagamento;
 
     public UserBean() {
         userid = "";
@@ -18,6 +19,7 @@ public class UserBean implements java.io.Serializable {
         citta = "";
         provincia = "";
         CAP = "";
+        metodo_pagamento = "";
     }
 
     public String getUserid() {
@@ -76,6 +78,14 @@ public class UserBean implements java.io.Serializable {
         this.CAP = CAP;
     }
 
+    public String getMetodoPagamento() {
+        return metodo_pagamento;
+    }
+
+    public void setMetodoPagamento(String metodo_pagamento) {
+        this.metodo_pagamento = metodo_pagamento;
+    }
+
     @Override
     public String toString() {
         return "UserBean{" +
@@ -83,6 +93,7 @@ public class UserBean implements java.io.Serializable {
                 ", citta='" + citta + '\'' +
                 ", provincia='" + provincia + '\'' +
                 ", CAP='" + CAP + '\'' +
+                ", metodo_pagamento='" + metodo_pagamento + '\'' + // Aggiunta della nuova variabile al metodo toString
                 '}';
     }
 }
