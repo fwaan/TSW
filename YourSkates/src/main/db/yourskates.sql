@@ -20,7 +20,8 @@ CREATE TABLE utente (
  indirizzo VARCHAR(255),
  citta VARCHAR(255),
  provincia VARCHAR(255),
- CAP VARCHAR(10)
+ CAP VARCHAR(10),
+ metodo_pagamento ENUM('Carta di credito', 'PayPal')
 );
 
 CREATE TABLE ordine (
@@ -37,6 +38,7 @@ CREATE TABLE ordine (
     citta VARCHAR(255) not null,
     provincia VARCHAR(255) not null,
     CAP VARCHAR(10) not null,
+    dataordine TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userid) REFERENCES utente(userid),
     FOREIGN KEY (id_asse) REFERENCES prodotto(id),
     FOREIGN KEY (id_carrello) REFERENCES prodotto(id),

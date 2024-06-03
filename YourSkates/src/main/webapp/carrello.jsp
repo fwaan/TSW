@@ -168,9 +168,9 @@
                 <% } else if (outOfStockComponent != null) { %>
                     <p style='text-align: center; font-family: Roboto-Serif; font-size: 1.75rem; font-weight: bold;'>Abbiamo esaurito il componente <%= outOfStockComponent %> nel tuo ordine, rimuovilo o attendi che viene rifornito per completare l'acquisto</p>
                 <% } else if (indirizzoinserito == false) { %>
-                    <p style='text-align: center; font-family: Roboto-Serif; font-size: 1.75rem; font-weight: bold;'>Per completare l'acquisto, aggiungi il tuo indirizzo, città, provincia e CAP nel tuo profilo</p>
+                    <p style='text-align: center; font-family: Roboto-Serif; font-size: 1.75rem; font-weight: bold;'>Per completare l'acquisto, <a href="utente.jsp?checkbox=attiva">aggiungi il tuo indirizzo, città, provincia e CAP nel tuo profilo</a></p>
                 <% } else if (metodopagamentoinserito == false) { %>
-                    <p style='text-align: center; font-family: Roboto-Serif; font-size: 1.75rem; font-weight: bold;'>Per completare l'acquisto, aggiungi un metodo di pagamento nel tuo profilo</p>
+                    <p style='text-align: center; font-family: Roboto-Serif; font-size: 1.75rem; font-weight: bold;'>Per completare l'acquisto, <a href="utente.jsp?checkbox=attiva">aggiungi un metodo di pagamento nel tuo profilo</a></p>
                 <%
 
                 }

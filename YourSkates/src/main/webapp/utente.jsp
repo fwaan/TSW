@@ -591,6 +591,15 @@ function showLoginForm() {
         cursor: pointer;
         border-radius: 0.25rem;">
     </form>
+    <script>
+        window.onload = function () {
+            var url = window.location.href;
+            if (url.indexOf('checkbox=attiva') != -1) {
+                document.getElementById('toggleSwitch').checked = true;
+                userInfo.style.display = 'block';
+            }
+        };
+    </script>
     <div style="display: flex; align-items: center;">
         <label class="switch" style="margin-top: 0.625rem;">
             <input type="checkbox" id="toggleSwitch">
