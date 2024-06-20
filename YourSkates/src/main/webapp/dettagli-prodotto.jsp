@@ -115,7 +115,9 @@
     <%
         if("true".equals(request.getAttribute("verificatarocca"))){
     %>
-        <p style="text-align: center; color: white; font-weight: bold;"><i class="fa fa-check-circle" aria-hidden="true" style="margin-right: 0.3125rem;"></i>Modifica avvenuta con successo<i class="fa fa-check-circle" aria-hidden="true" style="margin-left: 0.3125rem;"></i></p>
+    <div style="display: flex; justify-content: center; width: 100%;">
+        <p style="text-align: center; color: black; font-weight: bold; background-color: white; padding: 10px; border-radius: 5px; display: inline-block;"><i class="fa fa-check-circle" aria-hidden="true" style="margin-right: 0.3125rem;"></i>Modifica avvenuta con successo<i class="fa fa-check-circle" aria-hidden="true" style="margin-left: 0.3125rem;"></i></p>
+    </div>
     <%
     }
     %>

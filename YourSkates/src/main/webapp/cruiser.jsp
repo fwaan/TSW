@@ -54,7 +54,7 @@ if(prodotti == null){
         var text = descriptionElement.innerHTML;
         text = text.replace(/&amp;/g, '&').replace(/&/g, '<span class="special-char">&</span>');
         descriptionElement.innerHTML = text;
-        document.getElementById(prezzoElementId).innerText = ' \u20AC ' + prezzo;
+        document.getElementById(prezzoElementId).innerText = ' \u20AC ' + parseFloat(prezzo).toFixed(2);
     }
     window.onload = function() {
         updateDescription(document.getElementById('asse'), 'asseDescription', 'assePrezzo');

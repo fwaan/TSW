@@ -292,6 +292,8 @@ public class ProductControl extends HttpServlet {
 
 					request.removeAttribute("prodotti");
 					request.setAttribute("prodotti",model.doRetrieveAll("id"));
+					request.removeAttribute("ordiniAmministratore");
+					request.setAttribute("ordiniAmministratore",model.doRetrieveAllOrder());
 
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/amministratore-yourskates.jsp");
 					dispatcher.forward(request, response);
@@ -346,6 +348,8 @@ public class ProductControl extends HttpServlet {
 
 					request.removeAttribute("prodotti");
 					request.setAttribute("prodotti",model.doRetrieveAll("id"));
+					request.removeAttribute("ordiniAmministratore");
+					request.setAttribute("ordiniAmministratore",model.doRetrieveAllOrder());
 
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/amministratore-yourskates.jsp");
 					dispatcher.forward(request, response);
@@ -540,7 +544,7 @@ public class ProductControl extends HttpServlet {
 			calendar.setTime(originalDate);
 
 			// Add 2 hours to the calendar time
-			calendar.add(Calendar.HOUR_OF_DAY, -2);
+			// calendar.add(Calendar.HOUR_OF_DAY, -2);
 
 			// Create a new date with the adjusted time
 			Date adjustedDate = calendar.getTime();

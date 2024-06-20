@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +106,8 @@ public class ProductModelDS implements ProductModel {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 	
-		String insertSQL = "INSERT INTO ordine (userid, tipo_skateboard, colore, id_asse, id_carrello, id_cuscinetti, id_ruote, prezzo, indirizzo, citta, provincia, CAP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		// Aggiunto 'dataordine' alla query di inserimento
+		String insertSQL = "INSERT INTO ordine (userid, tipo_skateboard, colore, id_asse, id_carrello, id_cuscinetti, id_ruote, prezzo, indirizzo, citta, provincia, CAP, dataordine) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		String updateQuantitySQL = "UPDATE prodotto SET quantita = quantita - 1 WHERE id = ?";
 		String selectUserSQL = "SELECT indirizzo, citta, provincia, CAP FROM utente WHERE userid = ?";
 	
@@ -124,6 +126,11 @@ public class ProductModelDS implements ProductModel {
 				CAP = rs.getString("CAP");
 			}
 	
+			// Calcola il timestamp corrente meno due ore
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.HOUR_OF_DAY, 0);
+			java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
+	
 			for (SkateboardBean skateboard : cart.getSkateboards()) {
 				List<ProductBean> components = skateboard.getComponents();
 	
@@ -140,6 +147,7 @@ public class ProductModelDS implements ProductModel {
 				preparedStatement.setString(10, citta); // Città
 				preparedStatement.setString(11, provincia); // Provincia
 				preparedStatement.setString(12, CAP); // CAP
+				preparedStatement.setTimestamp(13, timestamp); // DataOrdine
 	
 				preparedStatement.executeUpdate();
 				for (ProductBean component : components) {

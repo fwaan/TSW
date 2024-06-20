@@ -114,7 +114,7 @@
                 for (ProductBean component : skateboard.getComponents()) {
                     out.println("<td>" + component.getNome() + "</td>");
                 }
-                out.println("<td>" + String.format("%.2f", skateboard.getTotalPrice()) + "\u20AC</td>");
+                out.println("<td>" + String.format("%.2f", skateboard.getTotalPrice()) + " \u20AC</td>");
                 out.println("<td><form action='ProductControl' method='post'>"
                     + "<input type='hidden' name='action' value='deleteCart'>"
                     + "<input type='hidden' name='skateboardId' value='" + skateboard.getId() + "'>"

@@ -309,7 +309,7 @@
 						<%=bean.getDescrizione()%>
 					</td>
 					<td>
-						<%=bean.getPrezzo()%>
+						<%= String.format("%.2f €", bean.getPrezzo()) %>
 					</td>
 					<td>
 						<%=bean.getQuantita()%>

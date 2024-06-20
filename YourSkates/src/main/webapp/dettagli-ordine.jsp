@@ -101,7 +101,7 @@
                 <td data-column="ID Carrello" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= ordine.getIdCarrello() %></td>
                 <td data-column="ID Cuscinetti" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= ordine.getIdCuscinetti() %></td>
                 <td data-column="ID Ruote" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= ordine.getIdRuote() %></td>
-                <td data-column="Prezzo" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= ordine.getPrezzo() %></td>
+                <td data-column="Prezzo" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= String.format("%.2f €", ordine.getPrezzo()) %></td>
                 <td data-column="Indirizzo" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= ordine.getIndirizzo() %></td>
                 <td data-column="Città" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= ordine.getCitta() %></td>
                 <td data-column="Provincia" style="background-color: white; text-align: center; border-right: 1px solid black;"><%= ordine.getProvincia() %></td>
