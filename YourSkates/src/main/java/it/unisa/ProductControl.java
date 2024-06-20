@@ -591,7 +591,7 @@ public class ProductControl extends HttpServlet {
 			float iva = totaleprezzo * 22 / 100;
 			float subtotale = totaleprezzo - iva;
 
-			cell = new PdfPCell(new Phrase("€"+String.valueOf(subtotale))); // Prezzo
+			cell = new PdfPCell(new Phrase("€" + String.format("%.2f", subtotale))); // Prezzo
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell.setBorder(Rectangle.NO_BORDER);
 			table.addCell(cell);
@@ -615,7 +615,7 @@ public class ProductControl extends HttpServlet {
 			cell.setBorder(Rectangle.NO_BORDER);
 			table.addCell(cell);
 
-			cell = new PdfPCell(new Phrase("€"+String.valueOf(subtotale)));
+			cell = new PdfPCell(new Phrase("€"+String.format("%.2f",subtotale)));
 			cell.setBorder(Rectangle.NO_BORDER);
 			table.addCell(cell);
 
@@ -628,7 +628,7 @@ public class ProductControl extends HttpServlet {
 			cell.setBorder(Rectangle.NO_BORDER);
 			table.addCell(cell);
 
-			cell = new PdfPCell(new Phrase("€"+String.valueOf(iva)));
+			cell = new PdfPCell(new Phrase("€"+String.format("%.2f",iva)));
 			cell.setBorder(Rectangle.NO_BORDER);
 			table.addCell(cell);
 
@@ -642,7 +642,7 @@ public class ProductControl extends HttpServlet {
 			cell.setBorder(Rectangle.NO_BORDER);
 			table.addCell(cell);
 
-			cell = new PdfPCell(new Phrase("€"+String.valueOf(totaleprezzo), font));
+			cell = new PdfPCell(new Phrase("€"+String.format("%.2f",totaleprezzo), font));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell.setBorder(Rectangle.NO_BORDER);
 			table.addCell(cell);

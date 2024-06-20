@@ -989,7 +989,7 @@ function showLoginForm() {
                 <td><%= order.getNomeCarrello() %></td>
                 <td><%= order.getNomeCuscinetti() %></td>
                 <td><%= order.getNomeRuote() %></td>
-                <td><%= order.getPrezzo() %> €</td>
+                <td><%= String.format("%.2f", order.getPrezzo()) %> €</td>
                 <td><div class="idcell"><%= order.getId() %> <button class="invoiceButton" data-order-id="<%= order.getId() %>" style="font-family: Roboto-Serif; font-weight: 400;">Genera fattura</button></div></td>
             </tr>
     <% } %>

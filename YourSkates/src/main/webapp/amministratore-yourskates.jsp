@@ -369,14 +369,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<% for (OrderBean order : (List<OrderBean>) orders) { %>
-					<tr>
-						<td style="text-align: center;"><%= order.getId() %></td>
-						<td style="text-align: center;"><%= order.getUserid() %></td>
-						<td style="text-align: center;"><%= order.getDataOrdine() %></td>
-						<td style="text-align: center;"><a href="ProductControl?action=readdetailsorder&id=<%=order.getId()%>" style="margin-left: 0.625rem;"><i class="fa fa-info-circle" aria-hidden="true"></i></a></td>
-					</tr>
-				<% } %>
+				<%
+				if(orders != null && orders.size() != 0){
+					for (OrderBean order : (List<OrderBean>) orders) { %>
+						<tr>
+							<td style="text-align: center;"><%= order.getId() %></td>
+							<td style="text-align: center;"><%= order.getUserid() %></td>
+							<td style="text-align: center;"><%= order.getDataOrdine() %></td>
+							<td style="text-align: center;"><a href="ProductControl?action=readdetailsorder&id=<%=order.getId()%>" style="margin-left: 0.625rem;"><i class="fa fa-info-circle" aria-hidden="true"></i></a></td>
+						</tr>
+				<% }
+				}%>
 			</tbody>
 		</table>
 	</div>

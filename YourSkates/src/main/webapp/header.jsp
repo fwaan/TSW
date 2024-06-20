@@ -33,7 +33,6 @@
                 min-height: 100vh;
                 background-image: url('immagini/sfondo.png');
                 background-size: cover;
-                background-position: center center;
                 background-repeat: no-repeat;
                 background-attachment: fixed;
                 background-position: center 100px;
@@ -118,8 +117,8 @@
 
             .image-container {
                 margin: 5%;
-                width: 25%;
-                height: 25%;
+                width: 35%;
+                height: 35%;
                 float: left;
                 overflow: hidden;
                 background-color: rgba(238, 191, 112, 0.5);
@@ -140,8 +139,8 @@
 
             .image-container-sell {
                 margin: 5%;
-                width: 25%;
-                height: 25%;
+                width: 35%;
+                height: 35%;
                 overflow: hidden;
                 background-color: rgba(238, 191, 112, 0.5);
                 background-position: center;
@@ -262,9 +261,9 @@
 }
 
 .select-container::after {
-    content: "\25BC"; /* freccia verso il basso */
+    content: '\25BC'; /* triangolo giù */
     position: absolute;
-    right: 0.5em;
+    right: 31%;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none; /* rende cliccabile l'elemento sottostante */
@@ -280,6 +279,7 @@
 
             .select-container {
         display: flex; /* Aggiunto per posizionare gli elementi uno accanto all'altro */
+        position: relative;
     }
     .prezzo {
         margin-left: 0.625rem; /* Aggiunto per creare dello spazio tra la select e il prezzo */

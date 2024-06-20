@@ -86,7 +86,7 @@ if(prodotti == null){
     </div>
     <div class="form-container">
         <form action="ProductControl?action=addCartCruiser" method="post">
-            <p class="image-caption2">Cruiser</p>
+            <p class="image-caption2">CRUISER</p>
             <div class="radio-container" style="margin-bottom: 0.0625rem;">
                 <div class="radio-option">
                     <input type="radio" id="nero" name="colore" value="nero" onclick="updateImage('nero')" style="background-color: black;" checked>
